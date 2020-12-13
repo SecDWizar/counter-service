@@ -1,10 +1,12 @@
 pipeline {
-    environment {
-        registry = "thewizard/counter-service"
-        registryCredential = 'dockerhub_id'
-    }
     parameters {
-        string(name: 'test_sleeptime', defaultValue: '30', description: 'sleep before starting the test')
+        string(name: 'test_sleeptime', defaultValue: '10', description: 'sleep before starting the test')
+        string(name: 'production_tag', defaultValue: '001', description: 'production tag to use in registry')
+    }
+    environment {
+        TAG = "${param.production_tag}"
+        DOCKERHUBREGISTRY = "thewizard/counter-service"
+        DOCKERHUBCREDENTIALS = credentials('dockerhub')
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -27,6 +29,11 @@ pipeline {
                     sh 'docker stack rm counter-service-test'
                 }
            }
+        }
+        stage('deploy') {
+            steps {
+                sh 'env'
+            }
         }
     }
 }

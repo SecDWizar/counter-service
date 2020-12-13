@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  postcounter:
-    image: postcounter:002
+  counter-service:
+    image: $REGISTRY:${TAG}
     ports:
       - "80:8000"
     networks:
-      - postcounter
+      - counter-service
     depends_on:
       - redis
     deploy:
@@ -23,9 +23,9 @@ services:
       - redis:/data
     command: redis-server --appendonly yes
     networks:
-      - postcounter
+      - counter-service
 networks:
-  postcounter:
+  counter-service:
     driver: overlay
     attachable: true
 volumes:
