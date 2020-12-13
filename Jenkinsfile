@@ -39,7 +39,7 @@ pipeline {
             post {
                 always {
                     sh 'docker logout'
-                    sh 'rm -rf ~/.docker/config.json
+                    sh 'rm -rf ~/.docker/config.json'
                 }
             }
         }
