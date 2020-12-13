@@ -4,8 +4,7 @@ pipeline {
         registryCredential = 'dockerhub_id'
     }
     parameters {
-        string(name: 'test_sleeptime', defaultValue: '10', description: 'sleep before starting the test')
-        string(name: 'test_postcount', defaultValue: '100', description: 'how many posts to do')
+        string(name: 'test_sleeptime', defaultValue: '30', description: 'sleep before starting the test')
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -21,7 +20,7 @@ pipeline {
             steps {
                 sh 'docker stack deploy -c stack-testing.yml counter-service-test'
                 sleep(time:"${params.test_sleeptime}",unit:"SECONDS")
-                sh "docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c 'for i in $(seq 1 ${params.test_postcount}); do curl -so /dev/null -w \"%{http_code}:%{time_total}\n\" -X POST http://counter-service:8000/; done; curl -s -w \"\n%{http_code}:%{time_total}\n\" -X GET http://counter-service:8000/ -o /tmp/outfile; out=$(cat /tmp/outfile); echo out="\"$out\""; if [ $out -eq ${params.postcount} ]; then echo success; else exit 1; fi\'"
+                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c \'for i in $(seq 1 100); do curl -so /dev/null -w "%{http_code}:%{time_total}\n" -X POST http://counter-service:8000/; done; curl -s -w "\n%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/ -o /tmp/outfile; out=$(cat /tmp/outfile); echo out="\"$out\""; if [ $out -eq 100 ]; then echo success; else exit 1; fi\''
             }
             post {
                 always {
