@@ -4,7 +4,7 @@ pipeline {
         string(name: 'production_tag', defaultValue: '001', description: 'production tag to use in registry')
     }
     environment {
-        TAG = params.production_tag
+        TAG = "${params.production_tag}"
         DOCKERHUBREGISTRY = "thewizard/counter-service"
         DOCKERHUBCREDENTIALS = credentials('dockerhub')
     }
