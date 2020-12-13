@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} -t ${JOB_NAME}:latest .'
+                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} -t ${JOB_NAME}:latest -t ${DOCKERHUBREGISTRY}:${TAG} -t ${DOCKERHUBREGISTRY}:latest .'
             }
         }
         stage('test') {
@@ -23,7 +23,7 @@ pipeline {
                 always {
                     sh 'docker stack rm counter-service-test'
                 }
-           }
+            }
         }
         stage('deploy') {
             environment {
@@ -33,7 +33,14 @@ pipeline {
             }
             steps {
                 sh 'env | grep DOCKER'
-                sh 'docker login -u $DOCKERHUBCREDENTIALS_USR -p $DOCKERHUBCREDENTIALS_PSW; docker tag ${JOB_NAME}:${BUILD_NUMBER} ${DOCKERHUBREGISTRY}:${TAG}'
+                sh 'docker login -u $DOCKERHUBCREDENTIALS_USR -p $DOCKERHUBCREDENTIALS_PSW; docker tag ${JOB_NAME}:${BUILD_NUMBER} ${DOCKERHUBREGISTRY}:${TAG}; docker tag ${JOB_NAME}:${BUILD_NUMBER} ${DOCKERHUBREGISTRY}:latest; docker push ${DOCKERHUBREGISTRY}:${TAG}'
+                sh 'docker stack deploy -c stack-production.yml counter-service'
+            }
+            post {
+                always {
+                    sh 'docker logout'
+                    sh 'rm -rf ~/.docker/config.json
+                }
             }
         }
     }
