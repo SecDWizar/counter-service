@@ -3,9 +3,7 @@ pipeline {
     stages {
         stage('build local container') {
             steps {
-                echo 'Hello world 6!'
-                sh 'docker --version'
-                sh 'ls -l'
+                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER}'
             }
         }
     }
