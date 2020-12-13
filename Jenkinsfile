@@ -16,10 +16,14 @@ pipeline {
         stage('test') {
             steps {
                 sh 'docker stack deploy -c stack-testing.yml counter-service-test'
-                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c \'seq 1 100 | xargs -P 10 curl -so /dev/null -X POST -w "%{time_total}\n" http://counter-service:8000/\''
-                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 curl -X GET -w "%{time_total}\n" http://counter-service:8000/'
-                sh 'docker stack rm counter-service-test'
+                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c \'for i in $(seq 1 100); do curl -so /dev/null -w "%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/; done\''
+                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 curl -s -w "\n%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/'
             }
+            post {
+                always {
+                    sh 'docker stack rm counter-service-test'
+                }
+           }
         }
     }
 }
