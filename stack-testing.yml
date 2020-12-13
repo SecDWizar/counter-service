@@ -1,26 +1,17 @@
 version: "3.9"
 
 services:
-  postcounter:
-    image: postcounter:002
-    ports:
-      - "80:8000"
+  counter-service:
+    image: counter-service:latest
     networks:
-      - postcounter
+      - counter-service
   redis:
     image: redis:6.0.9
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis:/data
-    command: redis-server --appendonly yes
     networks:
-      - postcounter
+      - counter-service
 
 networks:
-  postcounter:
+  counter-service:
     driver: overlay
     attachable: true
-volumes:
-  redis:
 
