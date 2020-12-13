@@ -5,6 +5,7 @@ pipeline {
             steps {
                 echo 'Hello world 6!'
                 sh 'docker --version'
+                sh 'ls -l'
             }
         }
     }
