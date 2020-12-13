@@ -10,7 +10,9 @@ pipeline {
     agent any 
     stages {
         stage ('baba') {
-            echo "${params.BRABCH}"
+            steps {
+                echo "${params.BRABCH}"
+            }
         }
         stage('build') {
             steps {
