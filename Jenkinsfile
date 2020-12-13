@@ -16,8 +16,7 @@ pipeline {
         stage('test') {
             steps {
                 sh 'docker stack deploy -c stack-testing.yml counter-service-test'
-                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c \'for i in $(seq 1 100); do curl -so /dev/null -w "%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/; done\''
-                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 curl -s -w "\n%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/'
+                sh 'docker run --rm --network counter-service-test_counter-service curlimages/curl:7.73.0 sh -c \'for i in $(seq 1 100); do curl -so /dev/null -w "%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/; done; curl -s -w "\n%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/ > outfile; cat outfile\''
             }
             post {
                 always {
