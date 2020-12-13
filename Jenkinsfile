@@ -33,7 +33,7 @@ pipeline {
             }
             steps {
                 sh 'env | grep DOCKER'
-                sh 'docker login -u $DOCKERHUBCREDENTIALS_USR -p $DOCKERHUBCREDENTIALS_PSW'
+                sh 'echo $DOCKERHUBCREDENTIALS_PSW | docker login -u $DOCKERHUBCREDENTIALS_USR --password-stdin'
             }
         }
     }
