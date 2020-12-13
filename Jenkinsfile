@@ -3,11 +3,6 @@ pipeline {
         string(name: 'test_sleeptime', defaultValue: '10', description: 'sleep before starting the test')
         string(name: 'production_tag', defaultValue: '001', description: 'production tag to use in registry')
     }
-    environment {
-        TAG = "${params.production_tag}"
-        DOCKERHUBREGISTRY = "thewizard/counter-service"
-        DOCKERHUBCREDENTIALS = credentials('dockerhub')
-    }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
     }
@@ -31,8 +26,14 @@ pipeline {
            }
         }
         stage('deploy') {
+            environment {
+                TAG = "${params.production_tag}"
+                DOCKERHUBREGISTRY = "thewizard/counter-service"
+                DOCKERHUBCREDENTIALS = credentials('dockerhub')
+            }
             steps {
-                sh 'env'
+                sh 'env | grep DOCKER'
+                sh 'docker login -u $DOCKERHUBCREDENTIALS_USR -p $DOCKERHUBCREDENTIALS_PSW'
             }
         }
     }
