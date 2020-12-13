@@ -14,6 +14,9 @@ r = redis.Redis(host='redis', port=6379)
 @app.route('/', defaults={'path': ''}, methods = ['GET', 'POST'])
 @app.route('/<path:path>', methods = ['GET', 'POST'])
 def catch_all(path):
+    
+    app.logger.info(path)
+    
     if request.method == 'POST':
         """update counter"""
         
