@@ -2,6 +2,7 @@ pipeline {
     parameters {
         string(name: 'production_tag', defaultValue: '001', description: 'production counter-service:<tag> to use in registry (prod. deployment)')
         string(name: 'pretestsleep', defaultValue: '10', description: 'sleep before starting the test')
+        string(name: 'branch', defaultValue: 'dev', description: 'set build branch')
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
