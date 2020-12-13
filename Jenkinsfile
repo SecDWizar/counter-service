@@ -33,7 +33,7 @@ pipeline {
             }
             steps {
                 sh 'env | grep DOCKER'
-                sh 'echo $DOCKERHUBCREDENTIALS_PSW | docker login -u $DOCKERHUBCREDENTIALS_USR --password-stdin'
+                sh 'docker login -u $DOCKERHUBCREDENTIALS_USR -p $DOCKERHUBCREDENTIALS_PSW; docker tag ${JOB_NAME}:${BUILD_NUMBER} ${DOCKERHUBREGISTRY}:${TAG}'
             }
         }
     }
