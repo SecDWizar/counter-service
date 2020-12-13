@@ -1,3 +1,0 @@
-Flask
-pyinstaller
-redis
