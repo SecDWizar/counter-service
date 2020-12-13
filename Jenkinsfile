@@ -1,7 +1,8 @@
 pipeline {
     parameters {
+        string(name: 'production_tag', defaultValue: '001', description: 'production counter-service:<tag> to use in registry (prod. deployment)')
         string(name: 'test_sleeptime', defaultValue: '10', description: 'sleep before starting the test')
-        string(name: 'production_tag', defaultValue: '001', description: 'production tag to use in registry')
+        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'dev', name: 'BRANCH', type: 'PT_BRANCH'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
