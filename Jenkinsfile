@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                echo 'hello3'
+                echo 'hello4'
                 sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} -t ${JOB_NAME}:latest .'
             }
         }
