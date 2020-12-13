@@ -17,7 +17,7 @@ pipeline {
         stage('test') {
             steps {
                 sh 'docker stack deploy -c stack-testing.yml counter-service-test${BUILD_NUMBER}'
-                sleep(time:"${params.pretestsleept}",unit:"SECONDS")
+                sleep(time:"${params.pretestsleep}",unit:"SECONDS")
                 sh 'docker run --rm --network counter-service-test${BUILD_NUMBER}_counter-service curlimages/curl:7.73.0 sh -c \'for i in $(seq 1 100); do curl -so /dev/null -w "%{http_code}:%{time_total}\n" -X POST http://counter-service:8000/; done; curl -s -w "\n%{http_code}:%{time_total}\n" -X GET http://counter-service:8000/ -o /tmp/outfile; out=$(cat /tmp/outfile); echo out="\"$out\""; if [ $out -eq 100 ]; then echo success; else exit 1; fi\''
             }
             post {
