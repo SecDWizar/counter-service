@@ -9,6 +9,9 @@ pipeline {
     }
     agent any 
     stages {
+        stage ('baba') {
+            echo "${params.BRABCH}"
+        }
         stage('build') {
             steps {
                 sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} -t ${JOB_NAME}:latest .'
