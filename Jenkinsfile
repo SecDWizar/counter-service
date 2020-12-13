@@ -1,9 +1,11 @@
 pipeline {
     agent any 
     stages {
-        stage('Stage 1') {
+        stage('build local container') {
             steps {
+                ls
                 echo 'Hello world 5!' 
+                docker --version
             }
         }
     }
