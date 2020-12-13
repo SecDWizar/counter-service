@@ -2,7 +2,6 @@ pipeline {
     parameters {
         string(name: 'production_tag', defaultValue: '001', description: 'production counter-service:<tag> to use in registry (prod. deployment)')
         string(name: 'pretestsleep', defaultValue: '10', description: 'sleep before starting the test')
-        gitParameter branchFilter: 'origin/(.*)', defaultValue: 'dev', name: 'branch', type: 'PT_BRANCH'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
@@ -11,7 +10,6 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                echo 'hello world 10'
                 sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} -t ${JOB_NAME}:latest .'
             }
         }
